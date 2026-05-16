@@ -2,10 +2,9 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>กระดานฝึกสะกดคำภาษาอังกฤษ (ไร้กรอบ + ปรับขนาดได้)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>กระดานฝึกสะกดคำภาษาอังกฤษ</title>
     <style>
-        /* กำหนดตัวแปร CSS สำหรับควบคุมขนาดตัวอักษรจาก JavaScript */
         :root {
             --letter-size: 70px;
         }
@@ -40,7 +39,6 @@
             font-size: 1.3rem;
             font-weight: bold;
         }
-        /* โซนควบคุมขนาดตัวอักษร */
         .size-control {
             display: flex;
             align-items: center;
@@ -67,42 +65,42 @@
         .control-btn:hover {
             background-color: #c53030;
         }
-        /* โซนเลือกตัวอักษรด้านบน */
+        
+        /* โซนเลือกตัวอักษรด้านบน (ปรับให้ชิดกันขึ้น) */
         .alphabet-palette {
             background-color: #ffffff;
-            padding: 12px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 4px; /* ลดระยะห่างระหว่างแถวบนและแถวล่าง */
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             border-bottom: 1px solid #e2e8f0;
         }
         .letter-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 5px; /* ลดช่องว่างระหว่างตัวอักษรซ้าย-ขวา ให้ชิดกันสวยงาม */
             justify-content: center;
         }
-        /* ปุ่มตัวอักษรเมนูด้านบน */
         .palette-letter {
             font-size: 1.8rem;
             font-weight: bold;
             cursor: pointer;
             transition: transform 0.1s;
-            padding: 2px 8px;
-            border-radius: 5px;
+            padding: 2px 5px; /* ลดพื้นที่ขอบด้านข้างตัวอักษรเมนู */
+            border-radius: 4px;
         }
         .palette-letter:hover {
             transform: scale(1.2);
             background-color: #edf2f7;
         }
-        /* แยกสีสระและพยัญชนะ (สีเข้มเด่นชัดเมื่อไม่มีกรอบ) */
         .vowel {
-            color: #e53e3e; /* สีแดง/ชมพูเข้ม */
+            color: #e53e3e;
         }
         .consonant {
-            color: #2b6cb0; /* สีน้ำเงินเข้ม */
+            color: #2b6cb0;
         }
+        
         /* พื้นที่กระดาน */
         .board {
             flex-grow: 1;
@@ -115,7 +113,6 @@
             margin: 15px;
             border-radius: 8px;
         }
-        /* ตัวอักษรบนกระดาน (ไม่มีกรอบสี่เหลี่ยม) */
         .draggable-letter {
             position: absolute;
             font-size: var(--letter-size);
@@ -125,14 +122,13 @@
             z-index: 10;
             display: inline-block;
             line-height: 1;
-            padding: 5px; /* เพิ่มพื้นที่ให้เอานิ้วแตะหรือเมาส์คลิกลากง่ายขึ้น */
-            /* ใส่เงาที่ตัวอักษรเล็กน้อยเพื่อให้ดูมีมิติเหมือนตัวอักษรพลาสติก */
+            padding: 10px;
             text-shadow: 2px 3px 0px rgba(0, 0, 0, 0.1); 
             transition: text-shadow 0.1s;
         }
         .draggable-letter:active {
             text-shadow: 4px 6px 4px rgba(0, 0, 0, 0.15);
-            transform: scale(1.02);
+            transform: scale(1.05);
         }
         .instruction {
             position: absolute;
@@ -149,25 +145,22 @@
     <header>
         <div class="logo">🔤 กระดานสะกดคำภาษาอังกฤษ</div>
         
-        <!-- แถบปรับขนาดตัวอักษร -->
         <div class="size-control">
-            <label for="size-slider">ปรับขนาดตัวอักษร:</label>
-            <input type="range" id="size-slider" min="40" max="1160" value="70">
+            <label for="size-slider">ปรับขนาด:</label>
+            <input type="range" id="size-slider" min="40" max="160" value="70">
             <span id="size-value">70px</span>
         </div>
 
         <button class="control-btn" onclick="clearBoard()">ล้างกระดาน</button>
     </header>
 
-    <!-- โซนเลือกตัวอักษร (A-Z) -->
     <div class="alphabet-palette">
         <div class="letter-row" id="uppercase-row"></div>
         <div class="letter-row" id="lowercase-row"></div>
     </div>
 
-    <!-- กระดานสำหรับลากวาง -->
     <div class="board" id="board">
-        <div class="instruction">💡 วิธีใช้: คลิกตัวอักษรด้านบนเพื่อเพิ่ม | ลากย้ายตำแหน่งอิสระ | ดับเบิ้ลคลิกเพื่อลบตัวอักษรนั้นๆ</div>
+        <div class="instruction">💡 วิธีใช้: คลิก/แตะตัวอักษรเพื่อเพิ่ม | ลากย้ายได้อิสระ | ดับเบิ้ลคลิกหรือดับเบิ้ลแท็บเพื่อลบ</div>
     </div>
 
     <script>
@@ -181,19 +174,15 @@
         let zIndexCounter = 100;
         let spawnOffset = 0;
 
-        // ระบบเปลี่ยนขนาดตัวอักษรแบบ Real-time
         sizeSlider.addEventListener('input', (e) => {
             const size = e.target.value;
             sizeValue.innerText = `${size}px`;
-            // เปลี่ยนค่าตัวแปร CSS (--letter-size) จะมีผลกับทุกตัวอักษรบนกระดานทันที
             document.documentElement.style.setProperty('--letter-size', `${size}px`);
         });
 
-        // สร้างเมนูตัวอักษรเริ่มต้น
         function initPalette() {
             const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             const lower = 'abcdefghijklmnopqrstuvwxyz';
-
             upper.split('').forEach(char => createPaletteButton(char, uppercaseRow));
             lower.split('').forEach(char => createPaletteButton(char, lowercaseRow));
         }
@@ -207,14 +196,12 @@
             container.appendChild(btn);
         }
 
-        // เพิ่มตัวอักษรลงบนกระดาน (เวอร์ชันไร้กรอบ)
         function spawnLetter(char) {
             const letter = document.createElement('div');
             letter.innerText = char;
             letter.classList.add('draggable-letter');
             letter.classList.add(vowels.includes(char) ? 'vowel' : 'consonant');
 
-            // คำนวณตำแหน่งเริ่มต้นเยื้องกันเล็กน้อย
             let initialLeft = 50 + spawnOffset;
             let initialTop = 50 + (spawnOffset % 4) * 25;
             
@@ -224,24 +211,28 @@
 
             spawnOffset = (spawnOffset + 30) % 240;
 
-            // ผูกระบบลากวาง
             makeElementDraggable(letter);
-
-            // ดับเบิ้ลคลิกเพื่อลบ
-            letter.addEventListener('dblclick', () => {
-                letter.remove();
-            });
 
             board.appendChild(letter);
         }
 
-        // ระบบลากวางวัตถุ
         function makeElementDraggable(elmnt) {
             let initialX, initialY;
+            let lastTap = 0;
 
             elmnt.addEventListener('pointerdown', dragStart);
 
             function dragStart(e) {
+                const now = Date.now();
+                const DOUBLE_TAP_DELAY = 300;
+                
+                if (now - lastTap < DOUBLE_TAP_DELAY) {
+                    elmnt.remove();
+                    e.preventDefault();
+                    return;
+                }
+                lastTap = now;
+
                 elmnt.style.zIndex = ++zIndexCounter;
                 
                 const rect = elmnt.getBoundingClientRect();
@@ -258,7 +249,6 @@
                 let newX = e.clientX - boardRect.left - initialX;
                 let newY = e.clientY - boardRect.top - initialY;
 
-                // จำกัดขอบเขตให้อยู่ในกระดาน
                 if (newX < 0) newX = 0;
                 if (newY < 0) newY = 0;
                 if (newX > boardRect.width - elmnt.offsetWidth) newX = boardRect.width - elmnt.offsetWidth;
@@ -275,7 +265,6 @@
             }
         }
 
-        // ล้างกระดาน
         function clearBoard() {
             const letters = board.querySelectorAll('.draggable-letter');
             letters.forEach(letter => letter.remove());
